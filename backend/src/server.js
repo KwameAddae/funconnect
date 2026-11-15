@@ -8,6 +8,7 @@ const { attachSocketServer } = require('./sockets');
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const messageRoutes = require('./routes/messages');
+const userRoutes = require('./routes/users');
 
 const app = express();
 app.use(cors());
@@ -25,6 +26,7 @@ app.get('/api/health', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/users', userRoutes);
 
 const server = http.createServer(app);
 const io = attachSocketServer(server);
