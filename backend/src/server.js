@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const path = require('path');
 const db = require('./db');
 const { attachSocketServer } = require('./sockets');
 
@@ -9,10 +10,16 @@ const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const messageRoutes = require('./routes/messages');
 const userRoutes = require('./routes/users');
+const uploadRoutes = require('./routes/upload');
+const searchRoutes = require('./routes/search');
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 app.get('/api/health', async (req, res) => {
   try {
@@ -27,6 +34,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/search', searchRoutes);
+
 
 const server = http.createServer(app);
 const io = attachSocketServer(server);
