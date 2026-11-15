@@ -2,18 +2,18 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-const { Pool } = require('pg');
+const db = require('./db');
+
+const authRoutes = require('./routes/auth');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-
 // Health check — hits the REAL database
 app.get('/api/health', async (req, res) => {
   try {
-    const result = await pool.query('SELECT NOW() AS time, current_database() AS db');
+    const result = await db.query('SELECT NOW() AS time, current_database() AS db');
     res.json({
       status: 'ok',
       app: 'FunConnect API',
@@ -24,6 +24,9 @@ app.get('/api/health', async (req, res) => {
     res.status(500).json({ status: 'db_error', error: err.message });
   }
 });
+
+// Auth routes
+app.use('/api/auth', authRoutes);
 
 const server = http.createServer(app);
 
