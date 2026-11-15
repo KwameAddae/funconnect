@@ -5,6 +5,7 @@ const http = require('http');
 const db = require('./db');
 
 const authRoutes = require('./routes/auth');
+const postRoutes = require('./routes/posts');
 
 const app = express();
 app.use(cors());
@@ -27,6 +28,7 @@ app.get('/api/health', async (req, res) => {
 
 // Auth routes
 app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 
 const server = http.createServer(app);
 
