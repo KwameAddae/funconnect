@@ -5,23 +5,23 @@ import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Feed from './pages/Feed';
+import Search from './pages/Search';
+import Profile from './pages/Profile';
+import Chat from './pages/Chat';
 
 function AppRoutes() {
   const { user, loading } = useAuth();
-  
   if (loading) return <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">Loading...</div>;
 
   return (
     <Routes>
-      {/* Redirect to feed if already logged in */}
       <Route path="/" element={user ? <Navigate to="/feed" replace /> : <Landing />} />
       <Route path="/login" element={user ? <Navigate to="/feed" replace /> : <Login />} />
       <Route path="/register" element={user ? <Navigate to="/feed" replace /> : <Register />} />
-      
-      {/* Protected Routes */}
       <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-      
-      {/* Catch all */}
+      <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
+      <Route path="/chat" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+      <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
